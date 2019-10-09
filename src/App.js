@@ -27,7 +27,7 @@ export default class App extends React.Component {
           this.scrollToBottom();
         },
       );
-    }, Math.random() * 2200);
+    }, Math.random() * 2500);
   }
 
   /* Handlers */
@@ -48,7 +48,6 @@ export default class App extends React.Component {
       clearTimeout(timer);
       this.generateResponse();
       this.setState({ value: '', messages: [...this.state.messages, { msg: this.state.value, date: moment().format('h:mm a'), sender: user }] }, () => {
-        console.log(this.state);
         this.scrollToBottom();
       });
     }
@@ -62,34 +61,56 @@ export default class App extends React.Component {
   renderInput() {
     return (
       <div className='chat-input'>
-        <input placeholder='Enter your message' value={this.state.value} onKeyDown={this.handleInput.bind(this)} onChange={this.handleChange.bind(this)} type='text' />
-        <button onClick={this.handlePublish.bind(this, 'user')}>Send</button>
+        <input placeholder='Type something' value={this.state.value} onKeyDown={this.handleInput.bind(this)} onChange={this.handleChange.bind(this)} type='text' />
+        <button onClick={this.handlePublish.bind(this, 'user')}>
+          <ion-icon name='ios-send'></ion-icon>
+        </button>
       </div>
+    );
+  }
+
+  renderHeader() {
+    return (
+      <header className='chat-header'>
+        <span>Chat</span>
+        <button>
+          <ion-icon name='ios-close'></ion-icon>
+        </button>
+      </header>
     );
   }
 
   renderMessages() {
     return (
-      <div ref='messagescontainer' className='chat-messages'>
-        {this.state.messages.map(msg => {
-          const type = msg.sender ? msg.sender : 'default';
-          return (
-            <div className={`chat-message chat-message_${type}`}>
-              <div className='chat-message_time'>{msg.date}</div>
-              <div className={`chat-bubble chat-bubble_${type}`}>
-                <div className='chat-bubble_text'>{msg.msg}</div>
+      <main className='chat-main'>
+        <div ref='messagescontainer' className='chat-messages'>
+          {this.state.messages.map(msg => {
+            const type = msg.sender ? msg.sender : 'default';
+            return (
+              <div className={`chat-message chat-message_${type}`}>
+                <div className='chat-message_time'>{msg.date}</div>
+                <div className={`chat-bubble chat-bubble_${type}`}>
+                  <div className='chat-bubble_text'>{msg.msg}</div>
+                </div>
               </div>
+            );
+          })}
+          {this.state.isLoading && (
+            <div className='chat-bubble_loading'>
+              <span class='dot'></span>
+              <span class='dot'></span>
+              <span class='dot'></span>
             </div>
-          );
-        })}
-        {this.state.isLoading && <div className='chat-bubble_loading'>Laddar</div>}
-      </div>
+          )}
+        </div>
+      </main>
     );
   }
 
   render() {
     return (
       <div className='chat'>
+        {this.renderHeader()}
         {this.renderMessages()}
         {this.renderInput()}
       </div>

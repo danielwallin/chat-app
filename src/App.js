@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import './App.scss';
 
 const phrases = ['Ok', 'No', 'Nice weather today', ':)', 'Do you like this chat?', 'I hear you', 'Cool', 'Hi', 'Hello again!', 'Nice to be back'];
@@ -17,7 +18,10 @@ export default class App extends React.Component {
   generateResponse() {
     this.setState({ isLoading: true });
     timer = setTimeout(() => {
-      this.setState({ isLoading: false, messages: [...this.state.messages, { msg: phrases[Math.floor(Math.random() * phrases.length)], date: new Date(), sender: null }] });
+      this.setState({
+        isLoading: false,
+        messages: [...this.state.messages, { msg: phrases[Math.floor(Math.random() * phrases.length)], date: moment().format('h:mm a'), sender: null }],
+      });
     }, Math.random() * 2200);
   }
 
@@ -38,8 +42,9 @@ export default class App extends React.Component {
     if (this.state.value !== '') {
       clearTimeout(timer);
       this.generateResponse();
-      this.setState({ value: '', messages: [...this.state.messages, { msg: this.state.value, date: new Date(), sender: user }] }, () => {
+      this.setState({ value: '', messages: [...this.state.messages, { msg: this.state.value, date: moment().format('h:mm a'), sender: user }] }, () => {
         console.log(this.state);
+        this.refs.messagescontainer.scrollTop = this.refs.messagescontainer.scrollHeight - this.refs.messagescontainer.clientHeight;
       });
     }
   }
@@ -56,11 +61,15 @@ export default class App extends React.Component {
 
   renderMessages() {
     return (
-      <div className='chat-messages'>
+      <div ref='messagescontainer' className='chat-messages'>
         {this.state.messages.map(msg => {
+          const type = msg.sender ? msg.sender : 'default';
           return (
-            <div className={`chat-bubble chat-bubble_${msg.sender ? msg.sender : 'default'}`}>
-              <div className='chat-bubble_text'>{msg.msg}</div>
+            <div className={`chat-message chat-message_${type}`}>
+              <div className='chat-message_time'>{msg.date}</div>
+              <div className={`chat-bubble chat-bubble_${type}`}>
+                <div className='chat-bubble_text'>{msg.msg}</div>
+              </div>
             </div>
           );
         })}

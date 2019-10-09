@@ -42,7 +42,26 @@ export default class App extends React.Component {
     );
   }
 
+  renderMessages() {
+    return (
+      <div className='chat-messages'>
+        {this.state.messages.map(msg => {
+          return (
+            <div className={`chat-bubble chat-bubble_${msg.sender ? msg.sender : 'default'}`}>
+              <div className='chat-bubble_text'>{msg.msg}</div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
   render() {
-    return <div className='app'>{this.renderInput()}</div>;
+    return (
+      <div className='app'>
+        {this.renderMessages()}
+        {this.renderInput()}
+      </div>
+    );
   }
 }

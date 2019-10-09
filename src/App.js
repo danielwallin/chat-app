@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import './App.scss';
 
-const phrases = ['Ok', 'No', 'Nice weather today', ':)', 'Do you like this chat?', 'I hear you', 'Cool', 'Hi', 'Hello again!', 'Nice to be back'];
+const phrases = ['Ok', 'No', 'Nice weather today, huh?', ':)', 'Do you like this chat?', 'I hear you', 'Cool', 'Hi', 'Hello again!', 'Nice to be back', 'Sure!'];
 let timer = null;
 
 export default class App extends React.Component {
@@ -18,10 +18,15 @@ export default class App extends React.Component {
   generateResponse() {
     this.setState({ isLoading: true });
     timer = setTimeout(() => {
-      this.setState({
-        isLoading: false,
-        messages: [...this.state.messages, { msg: phrases[Math.floor(Math.random() * phrases.length)], date: moment().format('h:mm a'), sender: null }],
-      });
+      this.setState(
+        {
+          isLoading: false,
+          messages: [...this.state.messages, { msg: phrases[Math.floor(Math.random() * phrases.length)], date: moment().format('h:mm a'), sender: null }],
+        },
+        () => {
+          this.scrollToBottom();
+        },
+      );
     }, Math.random() * 2200);
   }
 
@@ -44,9 +49,13 @@ export default class App extends React.Component {
       this.generateResponse();
       this.setState({ value: '', messages: [...this.state.messages, { msg: this.state.value, date: moment().format('h:mm a'), sender: user }] }, () => {
         console.log(this.state);
-        this.refs.messagescontainer.scrollTop = this.refs.messagescontainer.scrollHeight - this.refs.messagescontainer.clientHeight;
+        this.scrollToBottom();
       });
     }
+  }
+
+  scrollToBottom() {
+    this.refs.messagescontainer.scrollTop = this.refs.messagescontainer.scrollHeight - this.refs.messagescontainer.clientHeight;
   }
 
   /* Render functions */

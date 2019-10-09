@@ -18,20 +18,25 @@ export default class App extends React.Component {
 
   handleInput(event) {
     // If we press enter
-    if (event.keyCode == 13) {
+    const keyCode = event.keyCode || event.which;
+    if (keyCode === 13) {
       this.handlePublish('user');
     }
   }
 
   handlePublish(user) {
-    console.log('Publish ', user);
+    if (this.state.value !== '') {
+      this.setState({ value: '', messages: [...this.state.messages, { msg: this.state.value, date: new Date(), sender: user }] }, () => {
+        console.log(this.state);
+      });
+    }
   }
 
   /* Render functions */
   renderInput() {
     return (
       <div className='chat-input'>
-        <input placeholder='Enter your message' onKeyDown={this.handleInput.bind(this)} onChange={this.handleChange.bind(this)} type='text' />
+        <input placeholder='Enter your message' value={this.state.value} onKeyDown={this.handleInput.bind(this)} onChange={this.handleChange.bind(this)} type='text' />
         <button onClick={this.handlePublish.bind(this, 'user')}>Send</button>
       </div>
     );

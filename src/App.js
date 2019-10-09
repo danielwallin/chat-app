@@ -18,7 +18,7 @@ export default class App extends React.Component {
     this.setState({ isLoading: true });
     timer = setTimeout(() => {
       this.setState({ isLoading: false, messages: [...this.state.messages, { msg: phrases[Math.floor(Math.random() * phrases.length)], date: new Date(), sender: null }] });
-    }, 2000);
+    }, Math.random() * 2200);
   }
 
   /* Handlers */
@@ -64,13 +64,14 @@ export default class App extends React.Component {
             </div>
           );
         })}
+        {this.state.isLoading && <div className='chat-bubble_loading'>Laddar</div>}
       </div>
     );
   }
 
   render() {
     return (
-      <div className='app'>
+      <div className='chat'>
         {this.renderMessages()}
         {this.renderInput()}
       </div>

@@ -1,6 +1,9 @@
 import React from 'react';
 import './App.scss';
 
+const phrases = ['Ok', 'No', 'Nice weather today', ':)', 'Do you like this chat?', 'I hear you', 'Cool', 'Hi', 'Hello again!', 'Nice to be back'];
+let timer = null;
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -9,6 +12,13 @@ export default class App extends React.Component {
       value: '',
       isLoading: false,
     };
+  }
+
+  generateResponse() {
+    this.setState({ isLoading: true });
+    timer = setTimeout(() => {
+      this.setState({ isLoading: false, messages: [...this.state.messages, { msg: phrases[Math.floor(Math.random() * phrases.length)], date: new Date(), sender: null }] });
+    }, 2000);
   }
 
   /* Handlers */
@@ -26,6 +36,8 @@ export default class App extends React.Component {
 
   handlePublish(user) {
     if (this.state.value !== '') {
+      clearTimeout(timer);
+      this.generateResponse();
       this.setState({ value: '', messages: [...this.state.messages, { msg: this.state.value, date: new Date(), sender: user }] }, () => {
         console.log(this.state);
       });

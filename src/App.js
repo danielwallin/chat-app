@@ -13,15 +13,18 @@ export default class App extends React.Component {
 
   /* Handlers */
   handleChange(event) {
-    console.log(event);
+    this.setState({ value: event.target.value });
   }
 
   handleInput(event) {
-    console.log(event);
+    // If we press enter
+    if (event.keyCode == 13) {
+      this.handlePublish('user');
+    }
   }
 
-  handlePublish() {
-    console.log('Publish');
+  handlePublish(user) {
+    console.log('Publish ', user);
   }
 
   /* Render functions */
@@ -29,7 +32,7 @@ export default class App extends React.Component {
     return (
       <div className='chat-input'>
         <input placeholder='Enter your message' onKeyDown={this.handleInput.bind(this)} onChange={this.handleChange.bind(this)} type='text' />
-        <button onClick={this.handlePublish.bind(this)}>Send</button>
+        <button onClick={this.handlePublish.bind(this, 'user')}>Send</button>
       </div>
     );
   }

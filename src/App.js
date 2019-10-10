@@ -15,6 +15,15 @@ export default class App extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const appHeight = () => {
+      const doc = document.documentElement;
+      doc.style.setProperty('--s_height', `${window.innerHeight}px`);
+    };
+    window.addEventListener('resize', appHeight);
+    appHeight();
+  }
+
   generateResponse() {
     this.setState({ isLoading: true });
     timer = setTimeout(() => {
@@ -88,9 +97,11 @@ export default class App extends React.Component {
             const type = msg.sender ? msg.sender : 'default';
             return (
               <div className={`chat-message chat-message_${type}`}>
-                <div className='chat-message_time'>{msg.date}</div>
-                <div className={`chat-bubble chat-bubble_${type}`}>
-                  <div className='chat-bubble_text'>{msg.msg}</div>
+                <div className='chat-message-wrapper'>
+                  <div className='chat-message_time'>{msg.date}</div>
+                  <div className={`chat-bubble chat-bubble_${type}`}>
+                    <div className='chat-bubble_text'>{msg.msg}</div>
+                  </div>
                 </div>
               </div>
             );

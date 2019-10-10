@@ -19,6 +19,14 @@ html, body {
   box-sizing: border-box;
 }
 
+#root {
+  @media screen and (min-width: 600px) {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+  }
+}
+
 :root {
   --c_primary: #65c8fa;
   --c_secondary: #ecebeb;
@@ -64,6 +72,7 @@ button {
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
     position: relative;
     border-radius: 1rem;
+    overflow: hidden;
 
     &-header {
       width: 100%;
@@ -105,7 +114,7 @@ button {
         flex-direction: column;
         padding: 1.5rem;
         /* Arbitrary */
-        padding-bottom: 8rem;
+        padding-bottom: 13rem;
         z-index: 1;
 
         > * + * {
